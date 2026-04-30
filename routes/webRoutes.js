@@ -3,6 +3,7 @@ const router = express.Router();
 const csrf = require('../middleware/csrfProtection');
 const sessionAuth = require('../middleware/sessionAuth');
 const AuthController = require('../controllers/AuthController');
+const FuelRecordController = require('../controllers/FuelRecordController');
 
 router.get('/', (req, res) => res.redirect('/login'));
 
@@ -14,12 +15,15 @@ router.post('/login', csrf, AuthController.login);
 
 router.get('/logout', AuthController.logout);
 
-router.get('/dashboard', sessionAuth, (req, res) => {
-  res.render('dashboard', { username: req.session.username });
-});
+router.get('/dashboard', sessionAuth, FuelRecordController.getDashboard);
 
-router.get('/records', sessionAuth, csrf, (req, res) => {
-  res.render('records', { username: req.session.username, csrfToken: req.csrfToken() });
-});
+router.get('/records', sessionAuth, FuelRecordController.getRecords);
+router.get('/add-record', sessionAuth, csrf, FuelRecordController.showAddRecord);
+router.post('/add-record', sessionAuth, csrf, FuelRecordController.createRecord);
+
+router.get('/edit-record/:id', sessionAuth, csrf, FuelRecordController.showEditRecord);
+router.post('/update-record/:id', sessionAuth, csrf, FuelRecordController.updateRecord);
+
+router.post('/delete-record/:id', sessionAuth, FuelRecordController.deleteRecord);
 
 module.exports = router;
