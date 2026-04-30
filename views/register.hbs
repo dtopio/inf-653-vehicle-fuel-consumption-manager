@@ -1,18 +1,34 @@
-<h1>Register</h1>
+<div class="auth-card">
+  <div class="auth-brand">
+    <div class="auth-brand-icon">⛽</div>
+    <h1>FuelTrack</h1>
+    <p>Create your account</p>
+  </div>
 
-{{#if error}}
-	<p class="error">{{error}}</p>
-{{/if}}
+  {{#if error}}
+  <div class="alert alert-error">
+    <span>⚠️</span>
+    <span>{{error}}</span>
+  </div>
+  {{/if}}
 
-<form method="POST" action="/register">
-	<input type="hidden" name="_csrf" value="{{csrfToken}}" />
-	<label for="username">Username</label>
-	<input id="username" name="username" type="text" required />
+  <form method="POST" action="/register">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
 
-	<label for="password">Password</label>
-	<input id="password" name="password" type="password" required />
+    <div class="form-group">
+      <label class="form-label" for="username">Username</label>
+      <input class="form-control" id="username" name="username" type="text" placeholder="Choose a username" required />
+    </div>
 
-	<button type="submit">Register</button>
-</form>
+    <div class="form-group">
+      <label class="form-label" for="password">Password</label>
+      <input class="form-control" id="password" name="password" type="password" placeholder="Create a password" required />
+    </div>
 
-<p>Already registered? <a href="/login">Login</a></p>
+    <button type="submit" class="btn btn-primary btn-full" style="margin-top: 6px;">Create Account</button>
+  </form>
+
+  <div class="auth-footer">
+    Already have an account? <a href="/login">Sign in</a>
+  </div>
+</div>

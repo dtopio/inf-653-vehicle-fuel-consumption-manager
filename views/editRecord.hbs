@@ -1,31 +1,55 @@
-<h1>Edit Record</h1>
+<a href="/dashboard" class="back-link">← Back to Dashboard</a>
+
+<div class="page-header">
+  <h1 class="page-title">Edit Fuel Record</h1>
+  <p class="page-subtitle">Update an existing fuel consumption entry</p>
+</div>
 
 {{#if error}}
-	<p class="error">{{error}}</p>
+<div class="alert alert-error">
+  <span>⚠️</span>
+  <span>{{error}}</span>
+</div>
 {{/if}}
 
-<form method="POST" action="/records/{{record.id}}/edit">
-	<input type="hidden" name="_csrf" value="{{csrfToken}}" />
+<div class="form-card">
+  <form method="POST" action="/records/{{record.id}}/edit">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
 
-	<label for="date">Date</label>
-	<input id="date" name="date" type="date" value="{{record.date}}" required />
+    <div class="form-grid">
+      <div class="form-group form-full">
+        <label class="form-label" for="date">Date</label>
+        <input class="form-control" id="date" name="date" type="date" value="{{record.date}}" required />
+      </div>
 
-	<label for="vehicleType">Vehicle Type</label>
-	<select id="vehicleType" name="vehicleType" required>
-		<option value="Car" {{#if (eq record.vehicleType "Car")}}selected{{/if}}>Car</option>
-		<option value="Motorcycle" {{#if (eq record.vehicleType "Motorcycle")}}selected{{/if}}>Motorcycle</option>
-	</select>
+      <div class="form-group form-full">
+        <label class="form-label" for="vehicleType">Vehicle Type</label>
+        <select class="form-control" id="vehicleType" name="vehicleType" required>
+          <option value="Car" {{#if (eq record.vehicleType "Car")}}selected{{/if}}>🚗 Car</option>
+          <option value="Motorcycle" {{#if (eq record.vehicleType "Motorcycle")}}selected{{/if}}>🏍️ Motorcycle</option>
+        </select>
+      </div>
 
-	<label for="liters">Liters</label>
-	<input id="liters" name="liters" type="number" min="0" step="0.01" value="{{record.liters}}" required />
+      <div class="form-group">
+        <label class="form-label" for="liters">Liters</label>
+        <input class="form-control" id="liters" name="liters" type="number" min="0" step="0.01" value="{{record.liters}}" required />
+      </div>
 
-	<label for="distance">Distance Traveled (km)</label>
-	<input id="distance" name="distance" type="number" min="0" step="0.01" value="{{record.distance}}" required />
+      <div class="form-group">
+        <label class="form-label" for="distance">Distance (km)</label>
+        <input class="form-control" id="distance" name="distance" type="number" min="0" step="0.01" value="{{record.distance}}" required />
+      </div>
 
-	<label for="totalCost">Total Cost</label>
-	<input id="totalCost" name="totalCost" type="number" min="0" step="0.01" value="{{record.totalCost}}" required />
+      <div class="form-group form-full">
+        <label class="form-label" for="totalCost">Total Cost ($)</label>
+        <input class="form-control" id="totalCost" name="totalCost" type="number" min="0" step="0.01" value="{{record.totalCost}}" required />
+      </div>
+    </div>
 
-	<button type="submit">Update</button>
-</form>
-
-<p><a href="/dashboard">Back to Dashboard</a></p>
+    <hr class="divider" />
+    <div class="form-actions">
+      <a href="/dashboard" class="btn btn-ghost">Cancel</a>
+      <button type="submit" class="btn btn-primary">Update Record</button>
+    </div>
+  </form>
+</div>

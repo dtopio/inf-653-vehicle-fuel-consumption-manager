@@ -1,29 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>{{title}}</title>
-	<style>
-		body { font-family: Arial, sans-serif; margin: 0; background: #f4f6f8; }
-		header { background: #1f2937; color: #fff; padding: 12px 20px; }
-		main { max-width: 900px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; }
-		a { color: #2563eb; text-decoration: none; }
-		table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-		th, td { border: 1px solid #d1d5db; padding: 8px; text-align: left; }
-		th { background: #f9fafb; }
-		form { display: grid; gap: 10px; max-width: 420px; }
-		input, select, button { padding: 8px; }
-		.error { color: #b91c1c; }
-		.actions { margin: 10px 0 15px; display: flex; gap: 12px; }
-	</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{title}} — FuelTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-	<header>
-		<strong>Vehicle Fuel Consumption Manager</strong>
-	</header>
-	<main>
-		{{{body}}}
-	</main>
+<body class="{{#if username}}app-layout{{else}}auth-layout{{/if}}">
+
+  {{#if username}}
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon">⛽</div>
+      <span class="sidebar-brand-name">FuelTrack</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/dashboard" class="nav-link">
+        <span class="icon">📊</span>
+        Dashboard
+      </a>
+      <a href="/add-record" class="nav-link">
+        <span class="icon">➕</span>
+        Add Record
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">{{firstChar username}}</div>
+        <span class="user-name">{{username}}</span>
+      </div>
+      <form method="POST" action="/logout">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+        <button type="submit" class="logout-btn">Sign out</button>
+      </form>
+    </div>
+  </aside>
+  <main class="app-main">
+    {{{body}}}
+  </main>
+
+  {{else}}
+  <main class="auth-main">
+    {{{body}}}
+  </main>
+  {{/if}}
+
 </body>
 </html>

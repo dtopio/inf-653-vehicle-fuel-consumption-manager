@@ -1,31 +1,56 @@
-<h1>Add Record</h1>
+<a href="/dashboard" class="back-link">← Back to Dashboard</a>
+
+<div class="page-header">
+  <h1 class="page-title">Add Fuel Record</h1>
+  <p class="page-subtitle">Log a new fuel consumption entry</p>
+</div>
 
 {{#if error}}
-	<p class="error">{{error}}</p>
+<div class="alert alert-error">
+  <span>⚠️</span>
+  <span>{{error}}</span>
+</div>
 {{/if}}
 
-<form method="POST" action="/add-record">
-	<input type="hidden" name="_csrf" value="{{csrfToken}}" />
+<div class="form-card">
+  <form method="POST" action="/add-record">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
 
-	<label for="date">Date</label>
-	<input id="date" name="date" type="date" required />
+    <div class="form-grid">
+      <div class="form-group form-full">
+        <label class="form-label" for="date">Date</label>
+        <input class="form-control" id="date" name="date" type="date" required />
+      </div>
 
-	<label for="vehicleType">Vehicle Type</label>
-	<select id="vehicleType" name="vehicleType" required>
-		<option value="Car">Car</option>
-		<option value="Motorcycle">Motorcycle</option>
-	</select>
+      <div class="form-group form-full">
+        <label class="form-label" for="vehicleType">Vehicle Type</label>
+        <select class="form-control" id="vehicleType" name="vehicleType" required>
+          <option value="" disabled selected>Select vehicle type</option>
+          <option value="Car">🚗 Car</option>
+          <option value="Motorcycle">🏍️ Motorcycle</option>
+        </select>
+      </div>
 
-	<label for="liters">Liters</label>
-	<input id="liters" name="liters" type="number" min="0" step="0.01" required />
+      <div class="form-group">
+        <label class="form-label" for="liters">Liters</label>
+        <input class="form-control" id="liters" name="liters" type="number" min="0" step="0.01" placeholder="e.g. 40.5" required />
+      </div>
 
-	<label for="distance">Distance Traveled (km)</label>
-	<input id="distance" name="distance" type="number" min="0" step="0.01" required />
+      <div class="form-group">
+        <label class="form-label" for="distance">Distance (km)</label>
+        <input class="form-control" id="distance" name="distance" type="number" min="0" step="0.01" placeholder="e.g. 350" required />
+      </div>
 
-	<label for="totalCost">Total Cost</label>
-	<input id="totalCost" name="totalCost" type="number" min="0" step="0.01" required />
+      <div class="form-group form-full">
+        <label class="form-label" for="totalCost">Total Cost ($)</label>
+        <input class="form-control" id="totalCost" name="totalCost" type="number" min="0" step="0.01" placeholder="e.g. 58.00" required />
+      </div>
+    </div>
 
-	<button type="submit">Save</button>
-</form>
-
-<p><a href="/dashboard">Back to Dashboard</a></p>
+    <hr class="divider" />
+    <div class="form-actions">
+      <a href="/dashboard" class="btn btn-ghost">Cancel</a>
+      <button type="submit" class="btn btn-primary">Save Record</button>
+    </div>
+  </form>
+</div>

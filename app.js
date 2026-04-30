@@ -15,7 +15,12 @@ app.engine('hbs', engine({
   extname: '.hbs',
   defaultLayout: 'main',
   helpers: {
-    eq: (a, b) => a === b
+    eq: (a, b) => a === b,
+    firstChar: (str) => (str && str.length > 0) ? str[0].toUpperCase() : '?',
+    sumField: (arr, field) => {
+      if (!Array.isArray(arr)) return '0.00';
+      return arr.reduce((sum, item) => sum + Number(item[field] || 0), 0).toFixed(2);
+    }
   }
 }));
 app.set('view engine', 'hbs');
@@ -33,6 +38,12 @@ app.use(session({
   saveUninitialized: false,
   cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
+
+// Expose session user to all templates
+app.use((req, res, next) => {
+  res.locals.username = (req.session && req.session.username) || null;
+  next();
+});
 
 // Routes
 app.use('/', webRoutes);

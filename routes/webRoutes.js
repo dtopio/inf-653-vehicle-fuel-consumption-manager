@@ -7,6 +7,13 @@ const csrfProtection = require('../middleware/csrfProtection');
 
 const router = express.Router();
 
+router.get('/', (req, res) => {
+  if (req.session && req.session.userId) {
+    return res.redirect('/dashboard');
+  }
+  res.redirect('/login');
+});
+
 router.get('/login', csrfProtection, AuthController.showLogin);
 router.post('/login', csrfProtection, AuthController.loginWeb);
 
