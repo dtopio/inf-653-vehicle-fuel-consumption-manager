@@ -1,3 +1,31 @@
-<!-- Add Record Form -->
-<!-- Form fields: Date, Vehicle Type (dropdown), Liters, Distance, Cost -->
-<!-- Include CSRF token in form -->
+<h1>Add Record</h1>
+
+{{#if error}}
+	<p class="error">{{error}}</p>
+{{/if}}
+
+<form method="POST" action="/add-record">
+	<input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
+	<label for="date">Date</label>
+	<input id="date" name="date" type="date" required />
+
+	<label for="vehicleType">Vehicle Type</label>
+	<select id="vehicleType" name="vehicleType" required>
+		<option value="Car">Car</option>
+		<option value="Motorcycle">Motorcycle</option>
+	</select>
+
+	<label for="liters">Liters</label>
+	<input id="liters" name="liters" type="number" min="0" step="0.01" required />
+
+	<label for="distance">Distance Traveled (km)</label>
+	<input id="distance" name="distance" type="number" min="0" step="0.01" required />
+
+	<label for="totalCost">Total Cost</label>
+	<input id="totalCost" name="totalCost" type="number" min="0" step="0.01" required />
+
+	<button type="submit">Save</button>
+</form>
+
+<p><a href="/dashboard">Back to Dashboard</a></p>

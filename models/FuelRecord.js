@@ -1,34 +1,74 @@
-const { fuelRecords } = require('../config/database');
+const records = [];
+let nextRecordId = 1;
 
-let nextId = 1;
+class FuelRecord {
+	static create({ userId, date, vehicleType, liters, distance, totalCost }) {
+		const litersValue = Number(liters);
+		const distanceValue = Number(distance);
+		const totalCostValue = Number(totalCost);
 
-// Part B will fill in the real logic; these are the stubs so Part A routes don't blow up
-function findAllByUser(userId) {
-  return fuelRecords.filter(r => r.userId === userId);
+		const record = {
+			id: nextRecordId++,
+			userId: Number(userId),
+			date,
+			vehicleType,
+			liters: litersValue,
+			distance: distanceValue,
+			totalCost: totalCostValue
+		};
+
+		records.push(record);
+		return { ...record };
+	}
+
+	static findByUserId(userId) {
+		return records
+			.filter((record) => record.userId === Number(userId))
+			.map((record) => ({ ...record }))
+			.sort((a, b) => new Date(b.date) - new Date(a.date));
+	}
+
+	static findByIdForUser(recordId, userId) {
+		const record = records.find(
+			(item) => item.id === Number(recordId) && item.userId === Number(userId)
+		);
+
+		return record ? { ...record } : null;
+	}
+
+	static updateForUser(recordId, userId, { date, vehicleType, liters, distance, totalCost }) {
+		const index = records.findIndex(
+			(item) => item.id === Number(recordId) && item.userId === Number(userId)
+		);
+
+		if (index < 0) {
+			return null;
+		}
+
+		records[index] = {
+			...records[index],
+			date,
+			vehicleType,
+			liters: Number(liters),
+			distance: Number(distance),
+			totalCost: Number(totalCost)
+		};
+
+		return { ...records[index] };
+	}
+
+	static deleteForUser(recordId, userId) {
+		const index = records.findIndex(
+			(item) => item.id === Number(recordId) && item.userId === Number(userId)
+		);
+
+		if (index < 0) {
+			return false;
+		}
+
+		records.splice(index, 1);
+		return true;
+	}
 }
 
-function findById(id) {
-  return fuelRecords.find(r => r.id === id) || null;
-}
-
-function create(data) {
-  const record = { id: nextId++, ...data };
-  fuelRecords.push(record);
-  return record;
-}
-
-function update(id, data) {
-  const idx = fuelRecords.findIndex(r => r.id === id);
-  if (idx === -1) return null;
-  fuelRecords[idx] = { ...fuelRecords[idx], ...data };
-  return fuelRecords[idx];
-}
-
-function remove(id) {
-  const idx = fuelRecords.findIndex(r => r.id === id);
-  if (idx === -1) return false;
-  fuelRecords.splice(idx, 1);
-  return true;
-}
-
-module.exports = { findAllByUser, findById, create, update, remove };
+module.exports = FuelRecord;

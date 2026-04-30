@@ -1,3 +1,31 @@
-<!-- Edit Record Form -->
-<!-- Pre-populated form fields for: Date, Vehicle Type, Liters, Distance, Cost -->
-<!-- Include CSRF token in form -->
+<h1>Edit Record</h1>
+
+{{#if error}}
+	<p class="error">{{error}}</p>
+{{/if}}
+
+<form method="POST" action="/records/{{record.id}}/edit">
+	<input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
+	<label for="date">Date</label>
+	<input id="date" name="date" type="date" value="{{record.date}}" required />
+
+	<label for="vehicleType">Vehicle Type</label>
+	<select id="vehicleType" name="vehicleType" required>
+		<option value="Car" {{#if (eq record.vehicleType "Car")}}selected{{/if}}>Car</option>
+		<option value="Motorcycle" {{#if (eq record.vehicleType "Motorcycle")}}selected{{/if}}>Motorcycle</option>
+	</select>
+
+	<label for="liters">Liters</label>
+	<input id="liters" name="liters" type="number" min="0" step="0.01" value="{{record.liters}}" required />
+
+	<label for="distance">Distance Traveled (km)</label>
+	<input id="distance" name="distance" type="number" min="0" step="0.01" value="{{record.distance}}" required />
+
+	<label for="totalCost">Total Cost</label>
+	<input id="totalCost" name="totalCost" type="number" min="0" step="0.01" value="{{record.totalCost}}" required />
+
+	<button type="submit">Update</button>
+</form>
+
+<p><a href="/dashboard">Back to Dashboard</a></p>

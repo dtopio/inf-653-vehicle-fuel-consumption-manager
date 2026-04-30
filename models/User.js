@@ -1,28 +1,47 @@
-const bcrypt = require('bcryptjs');
-const { users } = require('../config/database');
+const users = [];
+let nextUserId = 1;
 
-let nextId = 1;
+class User {
+	static create({ username, password }) {
+		const existing = this.findByUsername(username);
+		if (existing) {
+			return null;
+		}
 
-function findByUsername(username) {
-  return users.find(u => u.username === username) || null;
+		const user = {
+			id: nextUserId++,
+			username,
+			password
+		};
+
+		users.push(user);
+		return { ...user, password: undefined };
+	}
+
+	static findByUsername(username) {
+		return users.find((user) => user.username === username);
+	}
+
+	static findById(id) {
+		const user = users.find((item) => item.id === Number(id));
+		if (!user) {
+			return null;
+		}
+
+		return { ...user, password: undefined };
+	}
+
+	static validateCredentials(username, password) {
+		const user = users.find(
+			(item) => item.username === username && item.password === password
+		);
+
+		if (!user) {
+			return null;
+		}
+
+		return { ...user, password: undefined };
+	}
 }
 
-function findById(id) {
-  return users.find(u => u.id === id) || null;
-}
-
-async function create(username, password) {
-  if (findByUsername(username)) {
-    throw new Error('Username already taken');
-  }
-  const hashed = await bcrypt.hash(password, 10);
-  const user = { id: nextId++, username, password: hashed };
-  users.push(user);
-  return user;
-}
-
-function verifyPassword(user, plainText) {
-  return bcrypt.compare(plainText, user.password);
-}
-
-module.exports = { findByUsername, findById, create, verifyPassword };
+module.exports = User;
