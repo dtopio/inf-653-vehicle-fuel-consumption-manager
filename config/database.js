@@ -1,2 +1,5 @@
-// Database Configuration
-// Mock data storage or real database connection setup
+// everything lives here while the server is running
+const users = [];
+const fuelRecords = [];
+
+module.exports = { users, fuelRecords };
