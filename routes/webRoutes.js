@@ -13,9 +13,14 @@ router.post('/login', csrfProtection, AuthController.loginWeb);
 router.get('/register', csrfProtection, AuthController.showRegister);
 router.post('/register', csrfProtection, AuthController.registerWeb);
 
-router.get('/dashboard', sessionAuth, FuelRecordController.showDashboard);
+router.post('/logout', sessionAuth, csrfProtection, AuthController.logoutWeb);
+
+router.get('/dashboard', sessionAuth, csrfProtection, FuelRecordController.showDashboard);
 
 router.get('/add-record', sessionAuth, csrfProtection, FuelRecordController.showAddRecordForm);
 router.post('/add-record', sessionAuth, csrfProtection, FuelRecordController.addRecordWeb);
+router.get('/records/:id/edit', sessionAuth, csrfProtection, FuelRecordController.showEditRecordForm);
+router.post('/records/:id/edit', sessionAuth, csrfProtection, FuelRecordController.updateRecordWeb);
+router.post('/records/:id/delete', sessionAuth, csrfProtection, FuelRecordController.deleteRecordWeb);
 
 module.exports = router;

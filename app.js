@@ -11,7 +11,13 @@ const apiRoutes = require('./routes/apiRoutes');
 const app = express();
 
 // View Engine Setup
-app.engine('hbs', engine({ extname: '.hbs', defaultLayout: 'main' }));
+app.engine('hbs', engine({
+  extname: '.hbs',
+  defaultLayout: 'main',
+  helpers: {
+    eq: (a, b) => a === b
+  }
+}));
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -41,6 +47,21 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+function startServer(port, attemptsLeft = 5) {
+  const server = app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
+
+  server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE' && attemptsLeft > 0) {
+      const nextPort = Number(port) + 1;
+      console.warn(`Port ${port} is in use. Retrying on port ${nextPort}...`);
+      startServer(nextPort, attemptsLeft - 1);
+      return;
+    }
+
+    throw error;
+  });
+}
+
+startServer(PORT);

@@ -74,6 +74,12 @@ class AuthController {
 
 		return res.json({ token });
 	}
+
+	static logoutWeb(req, res) {
+		req.session.destroy(() => {
+			res.redirect('/login');
+		});
+	}
 }
 
 module.exports = AuthController;
