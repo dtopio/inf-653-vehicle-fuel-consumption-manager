@@ -1,8 +1,12 @@
-// API Routes (JSON Endpoints)
-// Routes for:
-// - POST /api/login (JWT)
-// - GET /api/records (protected by JWT)
-// - POST /api/records (protected by JWT)
-// - PUT /api/records/:id (protected by JWT)
-// - DELETE /api/records/:id (protected by JWT)
-// - GET /api/statistics (protected by JWT) - weekly/monthly summary
+const express = require('express');
+
+const AuthController = require('../controllers/AuthController');
+const FuelRecordController = require('../controllers/FuelRecordController');
+const jwtAuth = require('../middleware/jwtAuth');
+
+const router = express.Router();
+
+router.post('/login', AuthController.loginApi);
+router.get('/records', jwtAuth, FuelRecordController.getRecordsApi);
+
+module.exports = router;

@@ -1,2 +1,5 @@
-// CSRF Protection Middleware
-// Configure and provide CSRF token validation for POST/PUT/DELETE requests
+const csrf = require('csurf');
+
+const csrfProtection = csrf();
+
+module.exports = csrfProtection;
